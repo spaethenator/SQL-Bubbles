@@ -4,8 +4,8 @@ import com.createhaus.model.LoginModel;
 import com.createhaus.model.MainModel;
 import com.createhaus.presenter.LoginPresenter;
 import com.createhaus.presenter.MainPresenter;
-import com.createhaus.view.LoginView;
 import com.createhaus.view.MainView;
+import com.createhaus.view.LoginView;
 
 /**
  * Created by kevin on 8/29/16.
@@ -19,7 +19,7 @@ public class App {
         initViewsAndPresenters();
 
         main.init();
-        login.doConnection();
+        login.display();
     }
 
     public static void main() {
@@ -29,7 +29,10 @@ public class App {
     static void initViewsAndPresenters() {
 
         main = new MainPresenter();
+        //main.addView("main", new MainViewObs(main));
         main.addView("main", new MainView(main));
+
+
         main.addModel("main", new MainModel());
 
         login = new LoginPresenter();

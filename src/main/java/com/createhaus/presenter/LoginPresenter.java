@@ -3,40 +3,34 @@ package com.createhaus.presenter;
 import com.createhaus.App;
 import com.createhaus.biscotti.BPresenter;
 import com.createhaus.biscotti.BSession;
-import com.createhaus.model.Connection;
 import com.createhaus.model.LoginModel;
+import com.createhaus.service.QueryEngine;
 
 public class LoginPresenter extends BPresenter {
 
-    Connection connection;
-
-    public void doConnection() {
+    @Override
+    public void display() {
         views.get("main").open();
     }
 
     public void login() {
         LoginModel model = (LoginModel) models.get("main");
 
+        try {
+            QueryEngine queryEngine = new QueryEngine(model.getServer(), model.getUsername(), model.getPassword());
 
-            if(connection == null) {
-                connection = new Connection();
-            }
+            // Bind the queryEngine to the session
+            BSession.set("queryEngine", queryEngine);
 
-            connection.setUsername(model.getUsername());
-            connection.setPassword(model.getPassword());
+            // Close the view
+            views.get("main").close();
 
-            if(connection.isValid()) {
-                // Bind the connection
-                BSession.set("connection", connection);
-
-                // Close the view
-                views.get("main").close();
-
-                // Return control to the app
-                App.main();
-            }
-            else {
-                // TODO: display the error message in the view
-            }
+            // Return control to the app
+            App.main();
+        }
+        catch (Exception e) {
+            // TODO: display the error message in the view
+            e.printStackTrace();
+        }
     }
 }

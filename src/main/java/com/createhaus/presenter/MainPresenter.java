@@ -2,8 +2,11 @@ package com.createhaus.presenter;
 
 import com.createhaus.biscotti.BPresenter;
 import com.createhaus.biscotti.BSession;
-import com.createhaus.model.Connection;
 import com.createhaus.model.MainModel;
+import com.createhaus.service.QueryEngine;
+import com.createhaus.view.Bubble;
+
+import java.sql.ResultSet;
 
 
 public class MainPresenter extends BPresenter {
@@ -13,11 +16,19 @@ public class MainPresenter extends BPresenter {
     }
 
     public void display() {
-        // Populate our model with the data from the bound connection
-        Connection connection = (Connection) BSession.get("connection");
-        MainModel model = (MainModel)models.get("main");
-        model.setSomeData(connection.getSomeData());
 
-        super.display();
+        QueryEngine queryEngine = (QueryEngine)BSession.get("queryEngine");
+
+        MainModel model = (MainModel)models.get("main");
+        model.setDatabases(queryEngine.listDatabases());
+
+        views.get("main").update(model);
+    }
+
+    public void performQuery(Bubble bubble, String database, String sql) {
+        QueryEngine queryEngine = (QueryEngine)BSession.get("queryEngine");
+        ResultSet rs = queryEngine.query(database, sql);
+
+        bubble.setOutput(rs);
     }
 }

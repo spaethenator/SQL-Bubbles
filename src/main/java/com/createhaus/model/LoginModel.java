@@ -6,6 +6,7 @@ public class LoginModel implements BModel {
 
     private String username;
     private String password;
+    private String server;
 
     public String getPassword() {
         return password;
@@ -21,5 +22,13 @@ public class LoginModel implements BModel {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getServer() {
+        return server;
+    }
+
+    public void setServer(String server) {
+        this.server = server;
     }
 }
